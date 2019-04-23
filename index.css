@@ -1,0 +1,142 @@
+html,body{
+    width:100%; min-height:100%; position:relative; padding:0; margin:0;
+    line-height: 1.75em;
+    background-color:whitesmoke;
+}
+ul,li,div{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+}
+
+header {
+    font-size: 25px;
+    padding: 10px;
+    width:100%; 
+    border:0;
+    clear:right;
+    box-sizing:border-box;
+    cursor: default;
+    -webkit-user-select: none;
+    background-color:inherit;
+    position: sticky;
+    top:0;
+    z-index: 1000;
+}
+
+
+#main-content {
+    margin-top: 20px;
+}
+
+#right-holder{
+    display:inline-block;
+    float:right;
+}
+#right-holder > button{
+    background-color: transparent;
+    font-size: inherit;
+    border:0;
+    outline:0;
+    cursor: pointer;
+}
+
+#tasks-holder{
+    max-width: 950px;
+    width:100%;
+    margin: 0 auto;
+    font-size:0;
+    position:relative;
+}
+
+
+.task-list{
+    width:50%;
+    display:inline-block;
+    font-size: 1rem;
+    position:absolute;
+    padding: 3px;
+}
+#right-list{
+    right:0;
+}
+#left-list{
+    left:0;
+}
+@media (max-width:560px){
+    .task-list{
+    position:relative;
+    width:100%;
+    }
+    #right-list{
+    margin-bottom: 100px;
+    }
+}
+.task{
+    width:100%;
+    font-family: sans-serif;
+    padding: 20px;
+    background-color:white;
+    margin-bottom: 15px;
+}
+.task-close{
+    position: relative;
+    width:100%;
+    height: 1.25em;
+    box-shadow: 0 0 3px gray;
+    cursor: pointer;
+    transition: background-color .25s;
+}
+.task-close:hover{
+    box-shadow: inset 0 0 4px gray, 0 0 7px gray;
+}
+.task-close:active{
+    background-color: tomato;
+}
+.task-close::after{
+    content: "X";
+    color: black;
+    position: absolute;
+    font-weight: bolder;
+    font-size: 13px;
+    right: 5px;
+    top: -3px;
+    text-shadow: 0 0 1px black;
+}
+.task-content{
+    margin-top: 15px;
+    font-family:sans-serif;
+    font-size: 1em;
+    padding: 0 5px;
+}
+
+#write-screen{
+    padding:25px;
+}
+#write-screen > .editme{
+    text-shadow:0;
+}
+.editme{
+    -webkit-user-modify: read-write;
+    min-height: 1em;
+    color: inherit;
+    font-weight:inherit;
+}
+.editme:empty:not(:focus):after{
+    color: gray;
+    content:"...";
+    display:inline-block;
+    width:100%;
+    height:100%;
+    border-bottom: 2px solid #A6C8FF;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 0 3px;
+}
+
+.no-display{
+    display:none;
+}
+.no-show{
+    visibility: hidden;
+}
