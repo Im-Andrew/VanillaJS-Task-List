@@ -1,10 +1,50 @@
-var leftList = document.getElementById('left-list');
-var rightList = document.getElementById('right-list');
-var tFrame = document.getElementById('task-frame');
-var clone = tFrame.cloneNode(true);
-var noSorting = false;
+var leftList;
+var rightList;
+var tFrame;
+var clone;
 
-clone.setAttribute("id", "");
+window.addEventListener( "load", function(){
+    // Setting global variables when loaded
+    leftList = document.getElementById('left-list');
+    rightList = document.getElementById('right-list');
+    tFrame = document.getElementById('task-frame');
+    clone = tFrame.cloneNode(true);
+    clone.setAttribute("id", "");
+
+    var oTask = document.getElementById("opening-task");
+    addAnimation(oTask, "bounceInDown");
+    loadFromStorage( oTask );
+
+
+    var elAddTask = document.getElementById("add-task");
+    elAddTask.addEventListener( "click", function(){
+        addTask();
+    });
+});
+
+function loadFromStorage( oTask ){
+    if (localStorage) {
+        var tasks = JSON.parse(localStorage.getItem("tasks"));
+        if (tasks) {
+            console.log(tasks);
+            addClass(oTask, "no-show");
+            oTask.parentNode.removeChild(oTask);
+            for (var i = 0; i < tasks.length; i++) {
+                addTask(tasks[i], "none", false );
+            }
+            listsSort( true );
+            var tasks = document.getElementsByClassName('task');
+            for (var i = 0; i < tasks.length; i++) {
+                var task = tasks[i];
+                removeClass(task, 'no-show');
+                addAnimation(task, 'bounceInDown');
+            }
+        } else {
+            removeClass( document.getElementById("opening-task"), "no-display")
+        }
+    }
+}
+
 
 function addClass(el, className) {
     if (el.classList)
@@ -67,14 +107,14 @@ function mobileMode() {
     return (window.innerWidth < 560);
 }
 //returns positive if left has more.
-function listcompare() {
-    return (!mobileMode() && !noSorting) ? (leftList.offsetHeight - rightList.offsetHeight) : 0 - noSorting;
+function listcompare( sort ) {
+    return (!mobileMode() && sort ) ? (leftList.offsetHeight - rightList.offsetHeight) : sort;
 }
 
-function listsSort() {
+function listsSort( sort ) {
     if (mobileMode()) { return; }
 
-    while (listcompare() < 0
+    while (listcompare( sort ) < 0
         && rightList.lastElementChild
         && rightList.lastElementChild.getBoundingClientRect().top > leftList.getBoundingClientRect().bottom) 
     {
@@ -82,7 +122,7 @@ function listsSort() {
         leftList.appendChild(rightList.lastElementChild);
     }
     
-    while (listcompare() > 0
+    while (listcompare( sort ) > 0
         && leftList.lastElementChild
         && leftList.lastElementChild.getBoundingClientRect().top > rightList.getBoundingClientRect().bottom ) 
     {
@@ -94,25 +134,26 @@ function listsSort() {
 function addAnimation(obj, animationName, animationEndCallback) {
     addClass(obj, "animated");
     addClass(obj, animationName);
-    var animEvent = obj.addEventListener("animationend", function (e) {
+    obj.addEventListener("animationend", function anim(e) {
         removeClass(obj, "animated");
         removeClass(obj, animationName);
-        removeEventListener(animEvent);
+        obj.removeEventListener( "animationend", anim);
         if (animationEndCallback) {
             animationEndCallback();
         }
     }, false);
 }
 
-function addTask(data, animation, scroll) {
+function addTask(data, animation, scroll, sort) {
+    sort = sort || true;
     var newTask = clone.cloneNode(true);
     newTask.children[1].innerHTML = data || "";
     var cancelButton = newTask.firstElementChild;
     var editContent = newTask.children[1];
-    var editListener = function () {
+    var editListener = function() {
         saveTasks();
     };
-    var deleteListener = function () {
+    var deleteListener = function() {
         cancelButton.removeEventListener('focusout', deleteListener);
         editContent.removeEventListener("input", editListener);
         deleteTask(newTask);
@@ -127,7 +168,7 @@ function addTask(data, animation, scroll) {
         console.log("no show")
     }
 
-    if (listcompare() <= 0 && !mobileMode()) {
+    if (listcompare( sort ) <= 0 && !mobileMode()) {
         leftList.appendChild(newTask);
     } else {
         rightList.appendChild(newTask);
@@ -157,15 +198,12 @@ function deleteTask(oldTask) {
                 });
                 saveTasks();
             }
-            listsSort();
+            listsSort( true );
+            console.log("sorted");
         }, (deleted != rightList.children.length + leftList.children.length) ? 450 : 1);
     });
 }
 
-function pushDown() {
-    var main = document.getElementById('main-content');
-    main.style.marginTop = document.getElementById('header-nav').offsetHeight + "px";
-}
 
 function saveTasks() {
     console.log("saving");
@@ -191,32 +229,6 @@ function saveTasks() {
     addClass(tFrame, "task");
 }
 
-window.onresize = function () {
-    pushDown();
-    listsSort();
-}
-window.onload = function () {
-    pushDown();
-    var oTask = document.getElementById("opening-task");
-    addAnimation(oTask, "bounceInDown");
-    if (localStorage) {
-        var tasks = JSON.parse(localStorage.getItem("tasks"));
-        if (tasks) {
-            console.log(tasks);
-            addClass(oTask, "no-show");
-            oTask.parentNode.removeChild(oTask);
-            noSorting = true;
-            for (var i = 0; i < tasks.length; i++) {
-                addTask(tasks[i], "none", true);
-            }
-            noSorting = false;
-            listsSort();
-            var tasks = document.getElementsByClassName('task');
-            for (var i = 0; i < tasks.length; i++) {
-                var task = tasks[i];
-                removeClass(task, 'no-show');
-                addAnimation(task, 'bounceInDown');
-            }
-        }
-    }
+window.onresize = function() {
+    listsSort( true );
 }

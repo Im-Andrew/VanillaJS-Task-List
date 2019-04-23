@@ -11,7 +11,7 @@
     <header id="header-nav">
       <h2 style="display:inline;">ONDA</h2><h6 style="display:inline; font-weight:normal;"><small> :OneDay Agenda</small></h6>
       <div id="right-holder">
-        <button onclick="addTask()">
+        <button id="add-task">
           Add
         </button>
       </div>
@@ -29,7 +29,7 @@
       <div id="tasks-holder" class="" >
         <div id="left-list" class="task-list">
 
-          <div id="opening-task" class="task">
+          <div id="opening-task" class="task no-display">
             <div class="task-close"  onclick="deleteTask(this.parentNode);this.onclick=null;"></div>
             <div class="task-content editme">
               <h2 style="display:inline;">Welcome</h2> to  <b>ONDA:</b> <small>Your daily go-to list for living in the <b><i>now</i></b>.</small>
@@ -39,7 +39,7 @@
                 Get what is due today, done today.
               </p>
               <p>
-                This is exactly what you will be using ONDA for, <b>today</b>, and every new day your list will be refreshed.
+                This is exactly what you will be using ONDA for, <b>today</b>. When the new day starts, go ahead and clear your list. 
               </p>
               <hr>
               <ul style="margin-left:20px;">
@@ -57,7 +57,8 @@
 
       </div>
     </div>
+
+    <script type="text/javascript" src="./index.js" />
   </body>
 
-  <script type="text/javascript" script="./index.js" />
 </html>
