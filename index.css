@@ -47,6 +47,8 @@ header {
     margin: 0 auto;
     font-size:0;
     position:relative;
+    display: flex;
+    align-items: flex-start;
 }
 
 
@@ -54,24 +56,20 @@ header {
     width:50%;
     display:inline-block;
     font-size: 1rem;
-    position:absolute;
     padding: 3px;
 }
-#right-list{
-    right:0;
-}
-#left-list{
-    left:0;
-}
+
+
 @media (max-width:560px){
     .task-list{
-    position:relative;
-    width:100%;
+        position:relative;
+        width:100%;
     }
-    #right-list{
-    margin-bottom: 100px;
+    #tasks-holder {
+        display: block;
     }
 }
+
 .task{
     width:100%;
     font-family: sans-serif;
